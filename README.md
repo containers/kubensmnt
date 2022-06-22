@@ -1,5 +1,7 @@
 # kubensmnt
 
+[![Integration Test](https://github.com/containers/kubensmnt/actions/workflows/integration-test.yml/badge.svg)](https://github.com/containers/kubensmnt/actions/workflows/integration-test.yml)
+
 A small library to enable go programs to join a new mount namespace, designed
 for helping get the Kubernetes control plane (kubelet and the container
 runtime) into a separate mountpoint.
@@ -40,7 +42,6 @@ func main() {
         fmt.Println("No mount namespace was configured; no action was taken")
     } else {
         fmt.Printf("Successfully joined the namespace bound to %q\n", path)
-    }
     }
     // Go on to do more important things...
 }
