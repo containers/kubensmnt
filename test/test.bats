@@ -14,9 +14,9 @@ function setup_file() {
     export NEW_NS=$(nsenter -m"$MOUNT_NAMESPACE" readlink /proc/self/ns/mnt)
     export OLD_NS=$(readlink /proc/self/ns/mnt)
 
-    export ALT_NAMESPACE=${TESTDIR}/time
+    export ALT_NAMESPACE=${TESTDIR}/net
     touch $ALT_NAMESPACE
-    unshare --time=$ALT_NAMESPACE sleep infinity &
+    unshare --net=$ALT_NAMESPACE sleep infinity &
     export ALT_PID=$!
 }
 

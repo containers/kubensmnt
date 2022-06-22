@@ -1,7 +1,9 @@
+BATS ?= $(shell which bats)
+
 .PHONY: test test-binaries test-linux test-nonlinux
 
 test: test-binaries
-	sudo bats .
+	sudo $(BATS) .
 
 test-binaries: test-linux test-nonlinux
 
