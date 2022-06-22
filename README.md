@@ -45,3 +45,7 @@ func main() {
     // Go on to do more important things...
 }
 ```
+
+# Testing
+
+See [test/README.md](test/README.md)
