@@ -47,6 +47,10 @@ func main() {
 }
 ```
 
+# Running in a separate mount namespace
+
+See the explanation and systemd examples in [utils/systemd](utils/systemd/)
+
 # Testing
 
 See [test/README.md](test/README.md)
