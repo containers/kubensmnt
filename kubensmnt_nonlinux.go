@@ -1,4 +1,5 @@
 //go:build !linux || !cgo
+// +build !linux !cgo
 
 /*
  * Copyright 2022 Jim Ramsay <jramsay@redhat.com>

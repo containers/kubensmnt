@@ -16,14 +16,12 @@ function setup_file() {
 
     export ALT_NAMESPACE=${TESTDIR}/net
     touch $ALT_NAMESPACE
-    unshare --net=$ALT_NAMESPACE sleep infinity &
-    export ALT_PID=$!
+    unshare --net=$ALT_NAMESPACE true
 }
 
 function teardown_file() {
     echo $output
     [ -z "$TESTDIR" ] && return
-    kill $ALT_PID
     umount $ALT_NAMESPACE || true
     umount $MOUNT_NAMESPACE || true
     umount $TESTDIR || true
