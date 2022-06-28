@@ -1,0 +1,89 @@
+#!/bin/bash
+
+usage() {
+    echo "Usage:"
+    echo "    $(basename $0) [--verbose|--quiet] [command ...]"
+    exit 1
+}
+
+LOGLEVEL=${KUBENSENTER_LOG:-1}
+_log() {
+    local level=$1; shift
+    if [[ $level -le $LOGLEVEL ]]; then
+        echo "kubensenter: $@" >&2
+    fi
+}
+
+info() {
+    _log 1 "$@"
+}
+
+debug() {
+    _log 2 "$@"
+}
+
+# Returns 0 if the argument given is a mount namespace
+ismnt() {
+    local nsfs=$(findmnt -o SOURCE -n -t nsfs "$1")
+    [[ $nsfs =~ nsfs\[mnt:\[ ]]
+}
+
+# Sets KUBENSMNT if it's not already
+DEFAULT_KUBENSMNT=${DEFAULT_KUBENSMNT:-"/run/kubens/mnt"}
+autodetect() {
+    local default=$DEFAULT_KUBENSMNT
+    if [[ -n $KUBENSMNT ]]; then
+        debug "Autodetect: \$KUBENSMNT already set"
+        return 0
+    fi
+    if [[ ! -e $default ]]; then
+        debug "Autodetect: No mount namespace found at $default"
+        return 1
+    fi
+    if ! ismnt "$default"; then
+        info "Autodetect: Stale or mismatched namespace at $default"
+        return 1
+    fi
+    KUBENSMNT=$default
+    info "Autodetect: kubens.service namespace found at $KUBENSMNT"
+    return 0
+}
+
+# If KUBENSMNT is set, run nsenter to join that mountspace
+kubensenter() {
+    local nsarg
+    if [[ -n $KUBENSMNT ]]; then
+        debug "Joining mount namespace in $KUBENSMNT"
+        nsarg=$(printf -- "--mount=%q" "$KUBENSMNT")
+    else
+        debug "KUBENSMNT not set; running normally"
+    fi
+    nsenter $nsarg "$@"
+}
+
+main() {
+    while [[ -n $1 ]]; do
+        case "$1" in
+            -h | --help)
+                usage
+                ;;
+            -v | --verbose)
+                shift
+                ((LOGLEVEL++))
+                ;;
+            -q | --quiet)
+                shift
+                ((LOGLEVEL--))
+                ;;
+            *)
+                break
+                ;;
+        esac
+    done
+
+    autodetect
+    kubensenter "$@"
+}
+
+# bash modulino
+[[ "$BASH_SOURCE" == "$0" ]] && main "$@"
