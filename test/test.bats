@@ -1,32 +1,19 @@
 #!/usr/bin/env bats
 # vim:set ft=bash :
 
+type bats_require_minimum_version &>/dev/null && \
+  bats_require_minimum_version 1.5.0
+
+DIR="$( cd "$( dirname "$BATS_TEST_FILENAME" )" >/dev/null 2>&1 && pwd )"
+. $DIR/utils.sh
+
 function setup_file() {
-    DIR="$( cd "$( dirname "$BATS_TEST_FILENAME" )" >/dev/null 2>&1 && pwd )"
+    setup_namespaces
     export PATH="$DIR:$PATH"
-
-    export TESTDIR=$(mktemp -d)
-
-    export MOUNT_NAMESPACE=${TESTDIR}/mnt
-    mount --make-unbindable --bind $TESTDIR $TESTDIR
-    touch $MOUNT_NAMESPACE
-    unshare --mount=$MOUNT_NAMESPACE --propagation slave mount --make-rshared /
-    export NEW_NS=$(nsenter -m"$MOUNT_NAMESPACE" readlink /proc/self/ns/mnt)
-    export OLD_NS=$(readlink /proc/self/ns/mnt)
-
-    export ALT_NAMESPACE=${TESTDIR}/net
-    touch $ALT_NAMESPACE
-    unshare --net=$ALT_NAMESPACE true
 }
 
 function teardown_file() {
-    echo $output
-    [ -z "$TESTDIR" ] && return
-    umount $ALT_NAMESPACE || true
-    umount $MOUNT_NAMESPACE || true
-    umount $TESTDIR || true
-    rm -rf "$TESTDIR"
-    unset TESTDIR
+    teardown_namespaces
 }
 
 @test "With cgo: No config" {
