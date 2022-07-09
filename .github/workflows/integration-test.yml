@@ -25,3 +25,6 @@ jobs:
 
     - name: Run test
       run: make -C test
+
+    - name: Utility tests
+      run: make -C utils/kubensenter/test
