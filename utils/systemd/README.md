@@ -21,7 +21,7 @@ drop-in will introduce an After relationship to `kubens.service` and include
 the appropriate environment variable if the service is running.
 
 For other services that do not use the kubensmnt library, you can wrap their
-execution in nsenter(1).
+execution in [kubensenter](../kubensenter/) or nsenter(1).
 
 Example nsenter usage:
 

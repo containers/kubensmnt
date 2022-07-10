@@ -1,8 +1,17 @@
 #!/bin/bash
 
 usage() {
+    echo "A command line wrapper to run commands or shells inside the"
+    echo "kubens.service mount namespace."
+    echo
     echo "Usage:"
     echo "    $(basename $0) [--verbose|--quiet] [command ...]"
+    echo
+    echo "Autodetect whether the kubens.service has pinned a mount namespace in a"
+    echo "well-known location, and if so, join it by passing it and the"
+    echo "user-specified command to nsenter(1). If kubens.service has not set up"
+    echo "the mount namespace, the user-specified command is still passed to"
+    echo "nsenter(1) but no namespace is entered."
     exit 1
 }
 
