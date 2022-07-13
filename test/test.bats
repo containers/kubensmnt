@@ -18,7 +18,6 @@ function teardown_file() {
 
 @test "With cgo: No config" {
     ns=$(test-linux)
-    echo "NS:$ns OLD:$OLD_NS"
     [[ "$ns" == "$OLD_NS" ]]
 }
 
@@ -68,5 +67,4 @@ function teardown_file() {
 @test "Without cgo: Mismatched bindmount" {
     export KUBENSMNT="$ALT_NAMESPACE"
     run ! test-nonlinux
-    echo $output
 }
