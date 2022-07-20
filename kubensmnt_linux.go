@@ -31,7 +31,7 @@ int nsenterResult = -1;
 char _errorMessage[ERR_LIMIT];
 char* errorMessage = _errorMessage; // Use an intermediary because C.GoString can't work on an array
 
-void __attribute__((constructor)) crio_nsenter_init(int argc, char **argv, char *envp[]) {
+void __attribute__((constructor)) kubensmnt_init() {
 	errorMessage[0] = '\0';
 	nsenterConfig = getKubeNsMnt();
 	nsenterResult = joinMountNamespace(nsenterConfig, errorMessage, ERR_LIMIT);
