@@ -1,14 +1,19 @@
 #!/usr/bin/env bats
 # vim:set ft=bash :
+# shellcheck disable=1091,2030,2031
+# ^- Disable checks around exports within subshells; that's how these tests must work
+# ^- Also disable import checks; we check utils.sh explicitly
 
 type bats_require_minimum_version &>/dev/null && \
   bats_require_minimum_version 1.5.0
 
 DIR="$( cd "$( dirname "$BATS_TEST_FILENAME" )" >/dev/null 2>&1 && pwd )"
-. $DIR/../../../test/utils.sh
+. "$DIR/../../../test/utils.sh"
 
 function setup_file() {
     setup_namespaces
+
+    # Ensure kubensenter (in the parent directory) is in the path
     export PATH="$DIR/..:$PATH"
 }
 
@@ -29,7 +34,7 @@ function teardown_file() {
 
 @test "KUBENSMNT: no namespace" {
     export KUBENSMNT="$TESTDIR/empty_file"
-    touch $KUBENSMNT
+    touch "$KUBENSMNT"
     run ! kubensenter readlink /proc/self/ns/mnt
 }
 
@@ -55,7 +60,7 @@ function teardown_file() {
 @test "Autodetect: no namespace" {
     unset KUBENSMNT
     export DEFAULT_KUBENSMNT="$TESTDIR/empty_file"
-    touch $DEFAULT_KUBENSMNT
+    touch "$DEFAULT_KUBENSMNT"
     ns=$(kubensenter readlink /proc/self/ns/mnt)
     [[ "$ns" == "$OLD_NS" ]]
 }

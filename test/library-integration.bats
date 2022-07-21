@@ -1,14 +1,19 @@
 #!/usr/bin/env bats
 # vim:set ft=bash :
+# shellcheck disable=1091,2030,2031
+# ^- Disable checks around exports within subshells; that's how these tests must work
+# ^- Also disable import checks; we check utils.sh explicitly
 
 type bats_require_minimum_version &>/dev/null && \
   bats_require_minimum_version 1.5.0
 
 DIR="$( cd "$( dirname "$BATS_TEST_FILENAME" )" >/dev/null 2>&1 && pwd )"
-. $DIR/utils.sh
+. "$DIR/utils.sh"
 
 function setup_file() {
     setup_namespaces
+
+    # Ensure the test binaries (built alongside this file) are in the path
     export PATH="$DIR:$PATH"
 }
 
@@ -34,7 +39,7 @@ function teardown_file() {
 
 @test "With cgo: Not a bindmount" {
     export KUBENSMNT="$TESTDIR/plainfile"
-    touch $KUBENSMNT
+    touch "$KUBENSMNT"
     run ! test-linux
 }
 
@@ -60,7 +65,7 @@ function teardown_file() {
 
 @test "Without cgo: Not a bindmount" {
     export KUBENSMNT="$TESTDIR/plainfile"
-    touch $KUBENSMNT
+    touch "$KUBENSMNT"
     run ! test-nonlinux
 }
 

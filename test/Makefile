@@ -1,8 +1,11 @@
 BATS ?= $(shell which bats)
+SHELLCHECK ?= $(shell which shellcheck)
 
-.PHONY: test test-binaries test-linux test-nonlinux
+.PHONY: test-all test-integration test-binaries test-linux test-nonlinux shellcheck
 
-test: test-binaries
+test-all: shellcheck test-integration
+
+test-integration: test-binaries
 	sudo $(BATS) .
 
 test-binaries: test-linux test-nonlinux
@@ -13,4 +16,5 @@ test-linux:
 test-nonlinux:
 	CGO_ENABLED=0 go build -o $@
 
-
+shellcheck:
+	$(SHELLCHECK) utils.sh *.bats

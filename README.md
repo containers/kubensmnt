@@ -1,6 +1,7 @@
 # kubensmnt
 
 [![Integration Test](https://github.com/containers/kubensmnt/actions/workflows/integration-test.yml/badge.svg)](https://github.com/containers/kubensmnt/actions/workflows/integration-test.yml)
+[![ShellCheck](https://github.com/containers/kubensmnt/actions/workflows/shellcheck.yml/badge.svg)](https://github.com/containers/kubensmnt/actions/workflows/shellcheck.yml)
 
 A small library to enable go programs to join a new mount namespace, designed
 for helping get the Kubernetes control plane (kubelet and the container
