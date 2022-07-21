@@ -1,6 +1,12 @@
 BATS ?= $(shell which bats)
+SHELLCHECK ?= $(shell which shellcheck)
 
-.PHONY: test
+.PHONY: test-all test-integration shellcheck
 
-test:
+test-all: shellcheck test-integration
+
+test-integration:
 	sudo $(BATS) .
+
+shellcheck:
+	$(SHELLCHECK) ../kubensenter *.bats
