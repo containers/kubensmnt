@@ -22,4 +22,4 @@ ExecStartPost=awk 'BEGIN {print "KUBENSMNT=${BIND_POINT}" > "${ENVFILE}"}'
 ExecStop=umount -R ${RUNTIME_DIRECTORY}
 
 [Install]
-WantedBy=multi-user.service
+WantedBy=multi-user.target
