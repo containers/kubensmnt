@@ -49,3 +49,42 @@ kubensenter
 ## See Also
 
 `nsenter(1)`
+
+# Installation
+
+We recommend running the installation scripts from the [parent utils
+directory](../README.md)
+
+However, you can install only the kubensenter script at this level:
+
+```
+sudo make install
+```
+
+This will copy the kubensenter script into /usr/local/bin.
+
+## Go vendoring
+
+If you are using vendored go modules, you may also include this via
+go embed inclusion. Just set up a tools.go like this:
+
+```go
+//go:build tools
+// +build tools
+
+// tools is a dummy package that will be ignored for builds, but included for dependencies.
+package tools
+
+import (
+	_ "github.com/containers/kubensmnt/utils/kubensenter"
+)
+```
+
+Then, as usual, run:
+```bash
+go get github.com/containers/kubensmnt@latest # or some tag
+go mod tidy
+go mod vendor
+```
+
+The kubensenter script will be in your local vendor/github.com/containers/kubensmnt/utils/kubensenter/ directory.
