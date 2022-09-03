@@ -1,6 +1,6 @@
 RECURSIVE_TARGETS := install test-all test-integration shellcheck
 
-.PHONY: help $(RECURSIVE_TARGETS)
+.PHONY: help $(RECURSIVE_TARGETS) test-embed
 
 help:
 	@echo "Run 'sudo make install' to install kubensenter and kubens.service."
@@ -17,3 +17,8 @@ help:
 $(RECURSIVE_TARGETS):
 	$(MAKE) -C kubensenter $@
 	$(MAKE) -C systemd $@
+
+test-all test-integration: test-embed
+
+test-embed:
+	go build .../test/
