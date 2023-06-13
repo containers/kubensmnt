@@ -84,3 +84,10 @@ function teardown_file() {
     export DEFAULT_KUBENSMNT="$MOUNT_NAMESPACE"
     run ! kubensenter readlink /proc/self/ns/mnt
 }
+
+@test "Precedence: success when file is not mounted correctly" {
+    touch "$TESTDIR/file_without_mount"
+    export KUBENSMNT="$TESTDIR/file_without_mount"
+    ns=$(kubensenter readlink /proc/self/ns/mnt)
+    [[ "$ns" == "$OLD_NS" ]]
+}
