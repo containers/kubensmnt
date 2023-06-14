@@ -1,5 +1,9 @@
 package systemd
 
+import (
+	_ "embed"
+)
+
 //go:embed kubens.service
 var Service string
 
