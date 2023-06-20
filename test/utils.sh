@@ -22,7 +22,7 @@ function setup_namespaces() {
 }
 
 function teardown_namespaces() {
-    [ -z "$TESTDIR" ] && return
+    [[ -z "$TESTDIR" ]] && return
     # Because both ALT_NAMESPACE and MOUNT_NAMESPACE root in $TESTDIR, a single
     # recursive unmount is enough to clean everything up:
     umount -R "$TESTDIR" || true
